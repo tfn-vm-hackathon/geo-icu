@@ -2,7 +2,7 @@ package com.tfnvmhachathon.geoicu;
 
 import org.springframework.boot.SpringApplication;
 
-public class GeoICU
+public class MainGeoICU
 {
 
 	public static void main(String[] args)
