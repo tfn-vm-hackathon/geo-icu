@@ -1,4 +1,4 @@
-package com.tfnvmhachathon.geoicu.process;
+package com.tfnvmhackathon.geoicu.process;
 
 import com.google.common.base.Joiner;
 

@@ -1,4 +1,4 @@
-package com.tfnvmhachathon.geoicu;
+package com.tfnvmhackathon.geoicu;
 
 import javax.sql.DataSource;
 
@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.tfnvmhachathon.geoicu.process.Click;
-import com.tfnvmhachathon.geoicu.process.ClickItemProcessor;
+import com.tfnvmhackathon.geoicu.process.Click;
+import com.tfnvmhackathon.geoicu.process.ClickItemProcessor;
 
 @Configuration
 @EnableBatchProcessing

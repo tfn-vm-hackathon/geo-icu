@@ -1,4 +1,4 @@
-package com.tfnvmhachathon.geoicu;
+package com.tfnvmhackathon.geoicu;
 
 import org.springframework.boot.SpringApplication;
 
