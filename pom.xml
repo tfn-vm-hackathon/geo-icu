@@ -52,6 +52,11 @@
 			<version>1.7.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
 		<!-- These *-vm libraries are our custom version since they are not in 
 			online maven rep -->
 		<dependency>
