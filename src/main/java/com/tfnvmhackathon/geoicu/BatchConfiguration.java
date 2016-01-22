@@ -38,10 +38,20 @@ public class BatchConfiguration
 
 		JdbcCursorItemReader<Click> reader = new JdbcCursorItemReader<Click>();
 		reader.setDataSource(dataSource);
-		reader.setRowMapper((rs, rowNum) -> new Click(rs.getLong("ip_address_decimal")));
-		reader
-			.setSql("SELECT DISTINCT ip_address_decimal FROM tracking WHERE psession_year = 2016 AND psession_month = 1 AND session_start_date = '2016-01-19';");
+		reader.setRowMapper((rs, rowNum) -> new Click(rs.getString("domainCode"), rs.getLong("ip_address_decimal")));
+		reader.setSql(this.getTrackingQuery());
 		return reader;
+	}
+
+	private String getTrackingQuery()
+	{
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT DISTINCT ip_address_decimal, domain_code ");
+		sql.append(" FROM tracking ");
+		sql.append(" WHERE psession_year = 2016 ");
+		sql.append(" AND psession_month = 1 ");
+		sql.append(" AND session_start_date = '2016-01-19';");
+		return sql.toString();
 	}
 
 	@Bean

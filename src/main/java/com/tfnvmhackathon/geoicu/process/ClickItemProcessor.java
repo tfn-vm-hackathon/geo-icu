@@ -30,23 +30,23 @@ public class ClickItemProcessor implements ItemProcessor<Click, Click>
 		sql.append(" order by ip.min_ip desc ");
 		sql.append(" limit 1; ");
 
-		List<Click> res = this.jdbcTemplate.query(sql.toString(), (rs, rowNum) -> this.mapResultToClick(rs, click.ip));
+		List<Click> res = this.jdbcTemplate.query(sql.toString(), (rs, rowNum) -> this.mapResultToClick(rs, click));
 		Preconditions.checkState(res.size() == 1);
 		return res.get(0);
 	}
 
-	private Click mapResultToClick(ResultSet rs, Long ip) throws SQLException
+	private Click mapResultToClick(ResultSet rs, Click click) throws SQLException
 	{
-		Click click = new Click(ip);
-		click.countryCode = rs.getString("country_code");
-		click.country = rs.getString("country");
-		click.region = rs.getString("region");
-		click.city = rs.getString("city");
-		click.latitude = rs.getDouble("latitude");
-		click.longitude = rs.getDouble("longitude");
-		click.postalCode = rs.getString("postal_code");
-		click.timezone = rs.getString("timezone");
-		return click;
+		Click queriedClick = new Click(click);
+		queriedClick.countryCode = rs.getString("country_code");
+		queriedClick.country = rs.getString("country");
+		queriedClick.region = rs.getString("region");
+		queriedClick.city = rs.getString("city");
+		queriedClick.latitude = rs.getDouble("latitude");
+		queriedClick.longitude = rs.getDouble("longitude");
+		queriedClick.postalCode = rs.getString("postal_code");
+		queriedClick.timezone = rs.getString("timezone");
+		return queriedClick;
 	}
 
 }
