@@ -1,5 +1,7 @@
 package com.tfnvmhackathon.geoicu;
 
+import java.time.LocalDate;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 
 import com.tfnvmhackathon.geoicu.process.Click;
 import com.tfnvmhackathon.geoicu.process.ClickItemProcessor;
@@ -28,6 +31,8 @@ import com.tfnvmhackathon.geoicu.process.ClickItemProcessor;
 @EnableAutoConfiguration
 public class BatchConfiguration
 {
+
+	private static final LocalDate DATE = LocalDate.of(2016, 1, 3);
 
 	@Bean
 	public ItemReader<Click> reader()
@@ -48,9 +53,13 @@ public class BatchConfiguration
 		StringBuilder sql = new StringBuilder();
 		sql.append(" SELECT DISTINCT ip_address_decimal, domain_code ");
 		sql.append(" FROM tracking ");
-		sql.append(" WHERE psession_year = 2016 ");
-		sql.append(" AND psession_month = 1 ");
-		sql.append(" AND session_start_date = '2016-01-19';");
+		sql.append(" WHERE psession_year = ");
+		sql.append(DATE.getYear());
+		sql.append(" AND psession_month = ");
+		sql.append(DATE.getMonth().getValue());
+		sql.append(" AND session_start_date = '");
+		sql.append(DATE.toString());
+		sql.append("';");
 		return sql.toString();
 	}
 
@@ -72,8 +81,9 @@ public class BatchConfiguration
 	public ItemWriter<Click> writer(DataSource dataSource)
 	{
 		FlatFileItemWriter<Click> writer = new FlatFileItemWriter<Click>();
+		writer.setResource(new FileSystemResource("result-" + DATE.toString() + ".csv"));
 		writer.setShouldDeleteIfExists(true);
-		writer.setResource(new FileSystemResource("result.csv"));
+		writer.setHeaderCallback(w -> w.append(Click.HEADERS));
 		writer.setLineAggregator(Click::toCsvString);
 		return writer;
 	}
@@ -81,7 +91,8 @@ public class BatchConfiguration
 	@Bean
 	public Step step1(StepBuilderFactory stepBuilderFactory, ItemReader<Click> reader, ItemProcessor<Click, Click> processor, ItemWriter<Click> writer)
 	{
-		return stepBuilderFactory.get("step1").<Click, Click> chunk(100).reader(reader).processor(processor).writer(writer).build();
+		return stepBuilderFactory.get("step1").<Click, Click> chunk(100).reader(reader).processor(processor).writer(writer)
+			.taskExecutor(new ConcurrentTaskExecutor()).throttleLimit(20).build();
 	}
 
 	@Bean
