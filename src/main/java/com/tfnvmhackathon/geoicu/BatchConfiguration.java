@@ -38,7 +38,7 @@ public class BatchConfiguration
 
 		JdbcCursorItemReader<Click> reader = new JdbcCursorItemReader<Click>();
 		reader.setDataSource(dataSource);
-		reader.setRowMapper((rs, rowNum) -> new Click(rs.getString("domainCode"), rs.getLong("ip_address_decimal")));
+		reader.setRowMapper((rs, rowNum) -> new Click(rs.getString("domain_code"), rs.getLong("ip_address_decimal")));
 		reader.setSql(this.getTrackingQuery());
 		return reader;
 	}
