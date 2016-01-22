@@ -7,9 +7,10 @@ import java.util.Date;
 
 public class HistoricalWeatherRequest {
 	
-	float latitude;
-	float longitude;
-	Date date;
+	private float latitude;
+	private float longitude;
+	private Date date;
+	private String cityName;
 	
 	public float getLatitude() {
 		return latitude;
@@ -38,6 +39,12 @@ public class HistoricalWeatherRequest {
 			e.printStackTrace();
 		}
 		return ret;
+	}
+	public String getCityName() {
+		return cityName;
+	}
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
 	}
 
 }

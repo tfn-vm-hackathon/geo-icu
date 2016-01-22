@@ -8,21 +8,32 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.springframework.retry.backoff.Sleeper;
+
 import com.tfnvmhackathon.geoicu.rest.domain.HistoricalWeatherRequest;
+import com.tfnvmhackathon.geoicu.rest.domain.HistoricalWeatherResponse;
 
 public class Stub {
 
-	public static void main(String[] args) throws UnsupportedEncodingException {
+	public static void main(String[] args) throws UnsupportedEncodingException, InterruptedException {
 
-		HistoricalWeatherRequest hwr = new HistoricalWeatherRequest();
+		String[] cities = new String[]{"Aachen", "Augsburg", "Berlin", "Bielefeld", "Bochum", "Bonn", "Braunschweig", "Bremen", "Chemnitz", "Dortmund", "Dresden", "Duisburg", "Dusseldorf", "Erfurt", "Essen", "Frankfurt am Main", "Freiburg", "Gelsenkirchen", "Hagen", "Halle", "Hamburg", "Hamm", "Hanover", "Herne", "Karlsruhe", "Kassel", "Kiel", "Krefeld", "Leipzig", "Leverkusen", "Magdeburg", "Mainz", "Mannheim", "Monchengladbach", "Munich", "Munster", "Nuremberg", "Oberhausen", "Oldenburg", "Osnabruck", "Rostock", "Saarbrucken", "Solingen", "Stuttgart", "Wiesbaden", "Wuppertal"};
+		//String[] cities = new String[]{"Aachen", "Augsburg", "Berlin"};
 		
-		Calendar calendar = new GregorianCalendar(2016,0,1);
-		
-		hwr.setDate(calendar.getTime());
-		hwr.setLatitude(34.650000f);
-		hwr.setLongitude(133.917000f);
-		
-		Client.getHistoricalWeather(hwr);
+		for (String city: cities){
+			
+			HistoricalWeatherRequest hwr = new HistoricalWeatherRequest();
+			
+			Calendar calendar = new GregorianCalendar(2015,11,6);
+			hwr.setDate(calendar.getTime());
+			hwr.setCityName(city);
+			
+			HistoricalWeatherResponse hwResponse = Client.getHistoricalWeather(hwr);
+			System.out.println(hwResponse.toCSVString());
+			
+			Thread.sleep(1000);
+			
+		}
 		
 	}
 
